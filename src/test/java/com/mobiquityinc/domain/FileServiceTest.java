@@ -1,5 +1,6 @@
-package com.mobiquityinc.facade;
+package com.mobiquityinc.domain;
 
+import com.mobiquityinc.domain.service.FileService;
 import com.mobiquityinc.exception.APIException;
 import com.mobiquityinc.template.MainTemplate;
 import org.junit.jupiter.api.Test;
@@ -9,10 +10,10 @@ import java.io.InputStream;
 
 import static com.mobiquityinc.template.MainTemplate.challenge;
 
-class LoadFileTest {
+class FileServiceTest {
 
     @Test
-    void happyDay() throws IOException, APIException {
+    void sampleTest() throws IOException, APIException {
         InputStream inputStream = getClass().getResource("/files/sample-test.txt").openStream();
 
         new MainTemplate()
@@ -49,9 +50,25 @@ class LoadFileTest {
                         challenge(8, 19.36, 79),
                         challenge(9,  6.76, 64)
                 )
-                .check(new LoadFile(inputStream).load())
+                .check(new FileService(inputStream).load())
         ;
     }
 
+    @Test
+    void sampleTest01() throws IOException, APIException {
+        InputStream inputStream = getClass().getResource("/files/sample-test-01.txt").openStream();
+
+        new MainTemplate()
+                .maxWeight(81,
+                        challenge(1, 53.38, 45),
+                        challenge(2, 88.62, 98),
+                        challenge(3, 78.48,  3),
+                        challenge(4, 72.30, 76),
+                        challenge(5, 30.18,  9),
+                        challenge(6, 46.34, 48)
+                )
+                .check(new FileService(inputStream).load())
+        ;
+    }
 
 }

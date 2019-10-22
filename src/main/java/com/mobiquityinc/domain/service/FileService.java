@@ -1,4 +1,4 @@
-package com.mobiquityinc.facade;
+package com.mobiquityinc.domain.service;
 
 import com.mobiquityinc.domain.PackageChallenge;
 import com.mobiquityinc.exception.APIException;
@@ -13,11 +13,11 @@ import java.util.List;
 import static com.mobiquityinc.makers.MakePackageChallenge.toPackageChallenge;
 import static com.mobiquityinc.messages.ErrorMessages.IO_ERROR;
 
-public class LoadFile {
+public class FileService {
 
     private InputStream inputStream;
 
-    public LoadFile(InputStream inputStream) {
+    public FileService(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class HomeControllerTest {
 
     @Test
-    void happyDay() {
+    void redirectHomeControllerToSwagger() {
         HomeController homeController = new HomeController();
         assertEquals("redirect:swagger-ui.html", homeController.home());
     }
