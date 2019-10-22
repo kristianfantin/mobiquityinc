@@ -11,4 +11,7 @@ public class SortChallenge {
         challenges.sort(Comparator.comparing(Challenge::getWeight));
     }
 
+    void sort(List<Integer> list) {
+        list.sort(Comparator.naturalOrder());
+    }
 }

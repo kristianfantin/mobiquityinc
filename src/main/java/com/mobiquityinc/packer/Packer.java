@@ -21,10 +21,9 @@ public class Packer {
     List<PackageChallenge> packageChallengeList = new FileService(fileInputStream).load();
     packageChallengeList.forEach(packageChallenge -> new SortChallenge().sortByWeight(packageChallenge.getChallenges()));
 
-    return packageChallengeList
-            .stream()
-            .map(packageChallenge -> new Solution(packageChallenge).execute())
-            .collect(Collectors.joining());
+    List<String> sb = packageChallengeList.stream().map(packageChallenge -> new Solution(packageChallenge).execute()).collect(Collectors.toList());
+
+    return sb.stream().collect(Collectors.joining(System.lineSeparator()));
   }
 
 }

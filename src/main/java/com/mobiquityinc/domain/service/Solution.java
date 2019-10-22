@@ -6,6 +6,8 @@ import com.mobiquityinc.domain.PackageChallenge;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Solution {
 
@@ -19,21 +21,10 @@ public class Solution {
         List<List<Challenge>> queue = new LinkedList<>();
 
         double maxWeight = packageChallenge.getMaxWeight();
-        for (Challenge currentChallenge : packageChallenge.getChallenges()) {
-            if (currentChallenge.getWeight() <= maxWeight) {
-                int size = queue.size();
-                for (int i = 0; i < size; i++) {
-                    queue.get(i)
-                            .stream()
-                            .filter(runningChallenge -> (runningChallenge.getWeight() + currentChallenge.getWeight()) <= maxWeight)
-                            .map(runningChallenge -> getChallenges(currentChallenge, runningChallenge))
-                            .forEach(queue::add);
-                }
-                queue.add(getChallenges(currentChallenge));
-            }
-            else
-                break;
-        }
+        packageChallenge.getChallenges()
+                .stream()
+                .filter(currentChallenge -> currentChallenge.getWeight() <= maxWeight)
+                .forEach(currentChallenge -> addChallenge(queue, maxWeight, currentChallenge));
 
         double maxSum = 0;
         List<Challenge> results = new ArrayList<>();
@@ -45,12 +36,30 @@ public class Solution {
             }
         }
 
-        List<String> solved = new ArrayList<>();
-        for (Challenge result : results) {
-            solved.add(String.valueOf(result.getIndex()));
-        }
+        return results.isEmpty()?  "-" : getResult(results);
+    }
 
-        return String.join(",", solved);
+    private void addChallenge(List<List<Challenge>> queue, double maxWeight, Challenge currentChallenge) {
+        IntStream.range(0, queue.size()).forEach(index -> addToList(queue, maxWeight, currentChallenge, index));
+        queue.add(getChallenges(currentChallenge));
+    }
+
+    private void addToList(List<List<Challenge>> queue, double maxWeight, Challenge currentChallenge, int i) {
+        queue.get(i)
+                .stream()
+                .filter(runningChallenge -> (runningChallenge.getWeight() + currentChallenge.getWeight()) <= maxWeight)
+                .map(runningChallenge -> getChallenges(currentChallenge, runningChallenge))
+                .forEach(queue::add);
+    }
+
+    private String getResult(List<Challenge> results) {
+        return String.join(", ", getCollect(results));
+    }
+
+    private List<String> getCollect(List<Challenge> results) {
+        List<Integer> collect = results.stream().map(Challenge::getIndex).collect(Collectors.toList());
+        new SortChallenge().sort(collect);
+        return collect.stream().map(Object::toString).collect(Collectors.toList());
     }
 
     private List<Challenge> getChallenges(Challenge currentChallenge, Challenge runningChallenge) {
@@ -59,9 +68,9 @@ public class Solution {
         return result;
     }
 
-    private List<Challenge> getChallenges(Challenge currentChallenge) {
+    private List<Challenge> getChallenges(Challenge challenge) {
         List<Challenge> result = new ArrayList<>();
-        result.add(currentChallenge);
+        result.add(challenge);
         return result;
     }
 }
