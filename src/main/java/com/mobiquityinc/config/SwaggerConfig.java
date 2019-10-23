@@ -28,9 +28,9 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(generateApiInfo())
-//                .tags(
-//                        new Tag("controller", "Rest Services for xxx")
-//                )
+                .tags(
+                        new Tag("inputController", "Path and Filename Data Input.")
+                )
         ;
     }
 
