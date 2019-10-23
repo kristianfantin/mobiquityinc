@@ -44,7 +44,7 @@ public class MakePackageChallenge {
             return packageChallenge;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new APIException(ErrorMessages.INVALID_INPUT.toString(), e);
+            throw new APIException(ErrorMessages.INVALID_INPUT.getMessage(), e);
         }
     }
 

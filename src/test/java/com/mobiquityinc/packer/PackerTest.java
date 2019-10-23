@@ -54,21 +54,23 @@ class PackerTest {
 
     @Test
     void shouldBeErrorOfFileNotFound() {
-        Assertions.assertThrows(
+        FileNotFoundException fileNotFoundException = Assertions.assertThrows(
                 FileNotFoundException.class,
                 () -> pack("/files/sample.rem"),
-                ErrorMessages.IO_ERROR.getMessage()
+                ""
         );
+        assertEquals("/files/sample.rem (No such file or directory)", fileNotFoundException.getMessage());
     }
 
     @Test
     void shouldBeErrorOfDataIn() {
         String filename = getClass().getResource("/files/sample-test-error.txt").toString().replace(CONTENT_FILE, "");
-        Assertions.assertThrows(
+        APIException apiException = Assertions.assertThrows(
                 APIException.class,
                 () -> pack(filename),
                 ErrorMessages.INVALID_INPUT.getMessage()
         );
+        assertEquals(ErrorMessages.INVALID_INPUT.getMessage(), apiException.getMessage());
     }
 
 }

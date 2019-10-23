@@ -6,7 +6,4 @@ public class APIException extends Exception {
     super(message, e);
   }
 
-  public APIException(String message) {
-    super(message);
-  }
 }

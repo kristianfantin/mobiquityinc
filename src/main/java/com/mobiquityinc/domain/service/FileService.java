@@ -23,15 +23,23 @@ public class FileService {
 
     public List<PackageChallenge> load() throws APIException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            List<PackageChallenge> result = new ArrayList<>();
-            String readLine;
-            while ((readLine = reader.readLine()) != null) {
-                if (!readLine.isEmpty())
-                    result.add(toPackageChallenge(readLine));
-            }
-            return result;
+            return getPackageChallenges(reader);
         } catch (IOException e) {
             throw new APIException(IO_ERROR.getMessage(), e);
         }
+    }
+
+    public List<PackageChallenge> getPackageChallenges(BufferedReader reader) throws IOException, APIException {
+        List<PackageChallenge> result = new ArrayList<>();
+        String readLine;
+        while ((readLine = getReadLine(reader)) != null) {
+            if (!readLine.isEmpty())
+                result.add(toPackageChallenge(readLine));
+        }
+        return result;
+    }
+
+    private String getReadLine(BufferedReader reader) throws IOException {
+        return reader == null? null : reader.readLine();
     }
 }
