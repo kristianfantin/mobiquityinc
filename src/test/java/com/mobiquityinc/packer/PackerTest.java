@@ -81,7 +81,7 @@ class PackerTest {
     }
 
     @Test
-    void givenPackageWeightGreaterThenLimitResultsPatternMessage() throws APIException, IOException {
+    void givenPackageWeightGreaterThanLimitResultsPatternMessage() throws APIException, IOException {
         String waiting =
                 "4" + LINE_SEPARATOR +
                         ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED.getMessage() + LINE_SEPARATOR +
@@ -118,6 +118,19 @@ class PackerTest {
         String filename = getClass().getResource("/files/sample-test-item-limit-cost-3-results.txt").toString().replace(CONTENT_FILE, "");
         String result = pack(filename);
         assertEquals("2, 3, 4", result);
+    }
+
+    @Test
+    void givenSampleTestWithOneMorePackageWith16ItemsThenTheLastOneNeedsReturnMessage() throws APIException, IOException {
+        String waiting =
+                "4" + LINE_SEPARATOR +
+                        "-" + LINE_SEPARATOR +
+                        "2, 7" + LINE_SEPARATOR +
+                        "8, 9" + LINE_SEPARATOR +
+                        ApiMessages.THERE_MIGHT_BE_UP_15_ITEM_TO_CHOOSE.getMessage();
+
+        String result = pack(getClass().getResource("/files/sample-test-more-than-15-items.txt").toString().replace(CONTENT_FILE, ""));
+        assertEquals(waiting, result);
     }
 
 }
