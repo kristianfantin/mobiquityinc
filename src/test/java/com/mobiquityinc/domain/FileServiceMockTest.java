@@ -2,7 +2,6 @@ package com.mobiquityinc.domain;
 
 import com.mobiquityinc.domain.service.FileService;
 import com.mobiquityinc.exception.APIException;
-import com.mobiquityinc.messages.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,6 +9,7 @@ import org.mockito.Mockito;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.mobiquityinc.messages.ApiMessages.IO_ERROR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -26,10 +26,10 @@ class FileServiceMockTest {
         APIException apiException = Assertions.assertThrows(
                 APIException.class,
                 spy::load,
-                ErrorMessages.IO_ERROR.getMessage()
+                IO_ERROR.getMessage()
         );
 
-        assertEquals(ErrorMessages.IO_ERROR.getMessage(), apiException.getMessage());
+        assertEquals(IO_ERROR.getMessage(), apiException.getMessage());
     }
 
 }

@@ -1,7 +1,7 @@
 package com.mobiquityinc.packer;
 
 import com.mobiquityinc.exception.APIException;
-import com.mobiquityinc.messages.ErrorMessages;
+import com.mobiquityinc.messages.ApiMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -68,9 +68,49 @@ class PackerTest {
         APIException apiException = Assertions.assertThrows(
                 APIException.class,
                 () -> pack(filename),
-                ErrorMessages.INVALID_INPUT.getMessage()
+                ApiMessages.INVALID_INPUT.getMessage()
         );
-        assertEquals(ErrorMessages.INVALID_INPUT.getMessage(), apiException.getMessage());
+        assertEquals(ApiMessages.INVALID_INPUT.getMessage(), apiException.getMessage());
+    }
+
+    @Test
+    void shouldValidateWeightMaxLimit() throws APIException, IOException {
+        String filename = getClass().getResource("/files/sample-test-max-limit.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals("6, 8", result);
+    }
+
+    @Test
+    void givenPackageWeightGreaterThen100ResultsPatternMessage() throws APIException, IOException {
+        String waiting =
+                "4" + LINE_SEPARATOR +
+                        ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED.getMessage() + LINE_SEPARATOR +
+                        "2, 7" + LINE_SEPARATOR +
+                        "8, 9";
+        String filename = getClass().getResource("/files/sample-test-package-weight.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals(waiting, result);
+    }
+
+    @Test
+    void givenPackageWithOneWeightItemAbove100TheItemShouldBeIgnored() throws APIException, IOException {
+        String filename = getClass().getResource("/files/sample-test-item-above-weight.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals("6, 8", result);
+    }
+
+    @Test
+    void givenPackageWithOneCostItemAbove100TheItemShouldBeIgnored() throws APIException, IOException {
+        String filename = getClass().getResource("/files/sample-test-item-above-cost.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals("6, 8", result);
+    }
+
+    @Test
+    void givenPackageWithOneCostLimitAndWeightLimitTheItemShouldBeReturned() throws APIException, IOException {
+        String filename = getClass().getResource("/files/sample-test-item-limit-cost.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals("10", result);
     }
 
 }

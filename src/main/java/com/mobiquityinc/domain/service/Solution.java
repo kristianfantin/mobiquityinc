@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.mobiquityinc.messages.ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED;
+
 public class Solution {
 
+    private static final int LIMIT_PACKAGE_WEIGHT = 100;
+    private static final int LIMIT_ITEM_COST = 100;
     private final PackageChallenge packageChallenge;
 
     public Solution(PackageChallenge packageChallenge) {
@@ -21,13 +25,20 @@ public class Solution {
         List<List<Challenge>> workList = new LinkedList<>();
 
         double maxWeight = packageChallenge.getMaxWeight();
+        if (maxWeight > LIMIT_PACKAGE_WEIGHT)
+            return PACKAGE_MAX_WEIGHT_EXCEEDED.getMessage();
+
         packageChallenge.getChallenges()
                 .stream()
-                .filter(currentChallenge -> currentChallenge.getWeight() <= maxWeight)
+                .filter(currentChallenge -> isItemValid(maxWeight, currentChallenge))
                 .forEach(currentChallenge -> addChallenge(workList, maxWeight, currentChallenge));
 
         List<Challenge> results = getChallengesResults(workList);
         return results.isEmpty()?  "-" : getResult(results);
+    }
+
+    private boolean isItemValid(double maxWeight, Challenge currentChallenge) {
+        return currentChallenge.getWeight() <= maxWeight && currentChallenge.getCurrency() <= LIMIT_ITEM_COST;
     }
 
     private List<Challenge> getChallengesResults(List<List<Challenge>> workList) {

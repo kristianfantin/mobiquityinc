@@ -4,7 +4,7 @@ import com.google.common.base.CharMatcher;
 import com.mobiquityinc.domain.Challenge;
 import com.mobiquityinc.domain.PackageChallenge;
 import com.mobiquityinc.exception.APIException;
-import com.mobiquityinc.messages.ErrorMessages;
+import com.mobiquityinc.messages.ApiMessages;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +44,7 @@ public class MakePackageChallenge {
             return packageChallenge;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new APIException(ErrorMessages.INVALID_INPUT.getMessage(), e);
+            throw new APIException(ApiMessages.INVALID_INPUT.getMessage(), e);
         }
     }
 

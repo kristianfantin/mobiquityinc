@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mobiquityinc.makers.MakePackageChallenge.toPackageChallenge;
-import static com.mobiquityinc.messages.ErrorMessages.IO_ERROR;
+import static com.mobiquityinc.messages.ApiMessages.IO_ERROR;
 
 public class FileService {
 
