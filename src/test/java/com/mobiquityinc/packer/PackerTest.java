@@ -77,11 +77,11 @@ class PackerTest {
     void shouldValidateWeightMaxLimit() throws APIException, IOException {
         String filename = getClass().getResource("/files/sample-test-max-limit.txt").toString().replace(CONTENT_FILE, "");
         String result = pack(filename);
-        assertEquals("6, 8", result);
+        assertEquals("6, 8, 9", result);
     }
 
     @Test
-    void givenPackageWeightGreaterThen100ResultsPatternMessage() throws APIException, IOException {
+    void givenPackageWeightGreaterThenLimitResultsPatternMessage() throws APIException, IOException {
         String waiting =
                 "4" + LINE_SEPARATOR +
                         ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED.getMessage() + LINE_SEPARATOR +
@@ -93,17 +93,17 @@ class PackerTest {
     }
 
     @Test
-    void givenPackageWithOneWeightItemAbove100TheItemShouldBeIgnored() throws APIException, IOException {
+    void givenPackageWithOneWeightItemAboveLimitTheItemShouldBeIgnored() throws APIException, IOException {
         String filename = getClass().getResource("/files/sample-test-item-above-weight.txt").toString().replace(CONTENT_FILE, "");
         String result = pack(filename);
-        assertEquals("6, 8", result);
+        assertEquals("6, 8, 9", result);
     }
 
     @Test
-    void givenPackageWithOneCostItemAbove100TheItemShouldBeIgnored() throws APIException, IOException {
+    void givenPackageWithOneCostItemAboveLimitTheItemShouldBeIgnored() throws APIException, IOException {
         String filename = getClass().getResource("/files/sample-test-item-above-cost.txt").toString().replace(CONTENT_FILE, "");
         String result = pack(filename);
-        assertEquals("6, 8", result);
+        assertEquals("6, 8, 9", result);
     }
 
     @Test
@@ -111,6 +111,13 @@ class PackerTest {
         String filename = getClass().getResource("/files/sample-test-item-limit-cost.txt").toString().replace(CONTENT_FILE, "");
         String result = pack(filename);
         assertEquals("10", result);
+    }
+
+    @Test
+    void givenPackageWithOneCostLimitAndWeightLimitTheItemShouldBeReturnedWith3Results() throws APIException, IOException {
+        String filename = getClass().getResource("/files/sample-test-item-limit-cost-3-results.txt").toString().replace(CONTENT_FILE, "");
+        String result = pack(filename);
+        assertEquals("2, 3, 4", result);
     }
 
 }

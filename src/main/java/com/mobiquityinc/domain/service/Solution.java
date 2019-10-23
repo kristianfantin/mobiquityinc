@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.mobiquityinc.messages.ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED;
 
@@ -41,6 +40,10 @@ public class Solution {
         return currentChallenge.getWeight() <= maxWeight && currentChallenge.getCurrency() <= LIMIT_ITEM_COST;
     }
 
+    private void addChallenge(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
+        new WorkChallenge(workList, maxWeight, currentChallenge).execute();
+    }
+
     private List<Challenge> getChallengesResults(List<List<Challenge>> workList) {
         double maxSum = 0;
         List<Challenge> results = new ArrayList<>();
@@ -54,19 +57,6 @@ public class Solution {
         return results;
     }
 
-    private void addChallenge(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
-        IntStream.range(0, workList.size()).forEach(index -> addToList(workList, maxWeight, currentChallenge, index));
-        workList.add(getChallenges(currentChallenge));
-    }
-
-    private void addToList(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge, int index) {
-        workList.get(index)
-                .stream()
-                .filter(runningChallenge -> (runningChallenge.getWeight() + currentChallenge.getWeight()) <= maxWeight)
-                .map(runningChallenge -> getChallenges(currentChallenge, runningChallenge))
-                .forEach(workList::add);
-    }
-
     private String getResult(List<Challenge> results) {
         return String.join(", ", getCollect(results));
     }
@@ -77,15 +67,4 @@ public class Solution {
         return collect.stream().map(Object::toString).collect(Collectors.toList());
     }
 
-    private List<Challenge> getChallenges(Challenge currentChallenge, Challenge runningChallenge) {
-        List<Challenge> result = getChallenges(currentChallenge);
-        result.add(runningChallenge);
-        return result;
-    }
-
-    private List<Challenge> getChallenges(Challenge challenge) {
-        List<Challenge> result = new ArrayList<>();
-        result.add(challenge);
-        return result;
-    }
 }
