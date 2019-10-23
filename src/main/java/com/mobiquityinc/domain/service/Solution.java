@@ -41,7 +41,7 @@ public class Solution {
     }
 
     private void addChallenge(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
-        new WorkChallenge(workList, maxWeight, currentChallenge).execute();
+        new Worker(workList, maxWeight, currentChallenge).execute();
     }
 
     private List<Challenge> getChallengesResults(List<List<Challenge>> workList) {

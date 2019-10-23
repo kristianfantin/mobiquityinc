@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-class WorkChallenge {
+class Worker {
 
     private List<List<Challenge>> workList;
     private double maxWeight;
     private Challenge currentChallenge;
 
-    WorkChallenge(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
+    Worker(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
         this.workList = workList;
         this.maxWeight = maxWeight;
         this.currentChallenge = currentChallenge;
