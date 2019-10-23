@@ -1,8 +1,11 @@
 package com.mobiquityinc.packer;
 
 import com.mobiquityinc.exception.APIException;
+import com.mobiquityinc.messages.ErrorMessages;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.mobiquityinc.packer.Packer.pack;
@@ -47,6 +50,25 @@ class PackerTest {
 
         String result = pack(getClass().getResource("/files/sample-test.txt").toString().replace(CONTENT_FILE, ""));
         assertEquals(waiting, result);
+    }
+
+    @Test
+    void shouldBeErrorOfFileNotFound() {
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> pack("/files/sample.rem"),
+                ErrorMessages.IO_ERROR.getMessage()
+        );
+    }
+
+    @Test
+    void shouldBeErrorOfDataIn() {
+        String filename = getClass().getResource("/files/sample-test-error.txt").toString().replace(CONTENT_FILE, "");
+        Assertions.assertThrows(
+                APIException.class,
+                () -> pack(filename),
+                ErrorMessages.INVALID_INPUT.getMessage()
+        );
     }
 
 }

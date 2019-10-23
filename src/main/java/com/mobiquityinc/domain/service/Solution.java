@@ -18,38 +18,42 @@ public class Solution {
     }
 
     public String execute() {
-        List<List<Challenge>> queue = new LinkedList<>();
+        List<List<Challenge>> workList = new LinkedList<>();
 
         double maxWeight = packageChallenge.getMaxWeight();
         packageChallenge.getChallenges()
                 .stream()
                 .filter(currentChallenge -> currentChallenge.getWeight() <= maxWeight)
-                .forEach(currentChallenge -> addChallenge(queue, maxWeight, currentChallenge));
+                .forEach(currentChallenge -> addChallenge(workList, maxWeight, currentChallenge));
 
+        List<Challenge> results = getChallengesResults(workList);
+        return results.isEmpty()?  "-" : getResult(results);
+    }
+
+    private List<Challenge> getChallengesResults(List<List<Challenge>> workList) {
         double maxSum = 0;
         List<Challenge> results = new ArrayList<>();
-        for (List<Challenge> challenges : queue) {
+        for (List<Challenge> challenges : workList) {
             double sum = challenges.stream().mapToDouble(Challenge::getCurrency).sum();
             if (sum > maxSum) {
                 maxSum = sum;
                 results = challenges;
             }
         }
-
-        return results.isEmpty()?  "-" : getResult(results);
+        return results;
     }
 
-    private void addChallenge(List<List<Challenge>> queue, double maxWeight, Challenge currentChallenge) {
-        IntStream.range(0, queue.size()).forEach(index -> addToList(queue, maxWeight, currentChallenge, index));
-        queue.add(getChallenges(currentChallenge));
+    private void addChallenge(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge) {
+        IntStream.range(0, workList.size()).forEach(index -> addToList(workList, maxWeight, currentChallenge, index));
+        workList.add(getChallenges(currentChallenge));
     }
 
-    private void addToList(List<List<Challenge>> queue, double maxWeight, Challenge currentChallenge, int i) {
-        queue.get(i)
+    private void addToList(List<List<Challenge>> workList, double maxWeight, Challenge currentChallenge, int index) {
+        workList.get(index)
                 .stream()
                 .filter(runningChallenge -> (runningChallenge.getWeight() + currentChallenge.getWeight()) <= maxWeight)
                 .map(runningChallenge -> getChallenges(currentChallenge, runningChallenge))
-                .forEach(queue::add);
+                .forEach(workList::add);
     }
 
     private String getResult(List<Challenge> results) {

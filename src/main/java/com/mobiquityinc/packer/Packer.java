@@ -16,14 +16,19 @@ public class Packer {
 
   private Packer() { }
 
-  public static String pack(String filePath) throws APIException, IOException {
+   public static String pack(String filePath) throws APIException, IOException {
     InputStream fileInputStream = new FileInputStream(filePath);
     List<PackageChallenge> packageChallengeList = new FileService(fileInputStream).load();
+    orderList(packageChallengeList);
+
+    return packageChallengeList
+            .stream()
+            .map(packageChallenge -> new Solution(packageChallenge).execute())
+            .collect(Collectors.joining(System.lineSeparator()));
+  }
+
+  private static void orderList(List<PackageChallenge> packageChallengeList) {
     packageChallengeList.forEach(packageChallenge -> new SortChallenge().sortByWeight(packageChallenge.getChallenges()));
-
-    List<String> sb = packageChallengeList.stream().map(packageChallenge -> new Solution(packageChallenge).execute()).collect(Collectors.toList());
-
-    return sb.stream().collect(Collectors.joining(System.lineSeparator()));
   }
 
 }

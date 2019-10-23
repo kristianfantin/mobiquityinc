@@ -71,4 +71,17 @@ class FileServiceTest {
         ;
     }
 
+//    @Test
+//    void shouldBeErrorOfIOException() throws IOException, APIException {
+//        InputStream inputStream = getClass().getResource("/files/sample-test-01.txt").openStream();
+//        FileService spy = Mockito.spy(new FileService());
+//        Mockito.doThrow(IOException.class).when(spy.load(inputStream));
+//
+//        Assertions.assertThrows(
+//                APIException.class,
+//                spy::load(inputStream),
+//                ErrorMessages.IO_ERROR.getMessage()
+//        );
+//
+//    }
 }
