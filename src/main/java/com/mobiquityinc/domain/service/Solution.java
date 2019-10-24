@@ -4,9 +4,12 @@ import com.mobiquityinc.domain.Challenge;
 import com.mobiquityinc.domain.PackageChallenge;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.mobiquityinc.messages.ApiMessages.PACKAGE_MAX_WEIGHT_EXCEEDED;
 import static com.mobiquityinc.messages.ApiMessages.THERE_MIGHT_BE_UP_15_ITEM_TO_CHOOSE;
@@ -58,16 +61,12 @@ public class Solution {
     }
 
     private List<Challenge> getChallengesResults(List<List<Challenge>> workList) {
-        double maxSum = 0;
-        List<Challenge> results = new ArrayList<>();
-        for (List<Challenge> challenges : workList) {
-            double sum = challenges.stream().mapToDouble(Challenge::getCurrency).sum();
-            if (sum > maxSum) {
-                maxSum = sum;
-                results = challenges;
-            }
-        }
-        return results;
+        List<Double> valuesSum = workList
+                .stream()
+                .map(x -> x.stream().mapToDouble(Challenge::getCurrency).sum())
+                .collect(Collectors.toList());
+        Optional<Integer> index = IntStream.range(0, valuesSum.size()).boxed().max(Comparator.comparingDouble(valuesSum::get));
+        return index.isPresent() ? workList.get(index.get()) : new ArrayList<>();
     }
 
     private String getResult(List<Challenge> results) {
