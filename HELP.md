@@ -3,12 +3,18 @@ Execute the command bellow:
 ```
 mvn spring-boot:run
 ```
-Open a browser and go to url:
+Open a web browser and go to url:
 ```
 localhost:8080
 ```
 Will open a Swagger UI. Put a filename into the Input Data and execute.
 - The result will be show.
+
+You either can use the file "implementation.jar" by command and use the web browser to test:
+```
+java -jar implementation.jar
+```
+
 
 <h4>Steps of solution</h4>
 Given the package:
